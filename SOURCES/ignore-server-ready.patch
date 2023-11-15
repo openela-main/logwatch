@@ -1,0 +1,13 @@
+--- a/scripts/services/fail2ban
++++ b/scripts/services/fail2ban
+@@ -91,7 +91,8 @@
+          ($ThisLine =~ /INFO\s+(Stopping all jails|Exiting Fail2ban)/) or
+          ($ThisLine =~ /INFO\s+Initiated '.*' backend/) or
+          ($ThisLine =~ /INFO\s+(Added logfile = .*|Set maxRetry = \d+|Set findtime = \d+|Set banTime = \d+)/) or
+-         ($ThisLine =~ /Unable to find a corresponding IP address for .*: \[Errno -2\] Name or service not known/)
++         ($ThisLine =~ /Unable to find a corresponding IP address for .*: \[Errno -2\] Name or service not known/) or
++         ($ThisLine =~ /: Server ready$/)
+        )
+     {
+         if ( $Debug >= 6 ) {
+

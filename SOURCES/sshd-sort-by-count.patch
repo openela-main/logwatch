@@ -1,0 +1,23 @@
+--- a/scripts/services/sshd
++++ b/scripts/services/sshd
+@@ -566,7 +566,8 @@
+ 
+ if (keys %BadLogins) {
+    print "\nFailed logins from:\n";
+-   foreach my $ip (sort SortIP keys %BadLogins) {
++   my $totalSort = TotalCountOrder(%BadLogins, \&SortIP);
++   foreach my $ip (sort $totalSort keys %BadLogins) {
+       my $name = LookupIP($ip);
+       my $totcount = 0;
+       foreach my $user (keys %{$BadLogins{$ip}}) {
+@@ -587,7 +588,8 @@
+ 
+ if (keys %IllegalUsers) {
+    print "\nIllegal users from:\n";
+-   foreach my $ip (sort SortIP keys %IllegalUsers) {
++   my $totalSort = TotalCountOrder(%IllegalUsers, \&SortIP);
++   foreach my $ip (sort $totalSort keys %IllegalUsers) {
+       my $name = LookupIP($ip);
+       my $totcount = 0;
+       foreach my $user (keys %{$IllegalUsers{$ip}}) {
+

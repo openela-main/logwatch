@@ -1,0 +1,13 @@
+--- a/scripts/services/secure
++++ b/scripts/services/secure
+@@ -273,6 +273,9 @@
+       ( $ThisLine =~ /polkit-grant-helper-pam\[\d+\]: pam_thinkfinger\(polkit:auth\): conversation failed/) or
+       ( $ThisLine =~ /polkitd\(authority=.*\): (Unr|R)egistered Authentication Agent/) or
+       ( $ThisLine =~ /polkitd\(authority=.*\): Operator of unix-session:/) or
++      ( $ThisLine =~ /polkitd.*Acquired the name .* on the system bus/) or
++      ( $ThisLine =~ /polkitd.*Finished loading, compiling/) or
++      ( $ThisLine =~ /polkitd.*Loading rules from directory /) or
+       ( $ThisLine =~ /(gdm-session-worker|gdm-password|gnome-screensaver-dialog)\[\d+\]: gkr-pam: no password is available for user/) or
+       ( $ThisLine =~ /gkr-pam: the password for the login keyring was invalid/) or
+       ( $ThisLine =~ /groupadd\[\d+\]: group added to /) or    # Details in other messages
+

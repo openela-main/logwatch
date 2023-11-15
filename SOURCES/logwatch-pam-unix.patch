@@ -1,0 +1,20 @@
+===================================================================
+RCS file: /usr/share/logwatch/scripts/services/RCS/pam_unix,v
+retrieving revision 1.1
+diff -u -r1.1 /usr/share/logwatch/scripts/services/pam_unix
+--- a/scripts/services/pam_unix	2022/01/20 14:21:24	1.1
++++ b/scripts/services/pam_unix	2022/01/20 14:22:35
+@@ -340,6 +340,12 @@
+       } else  {
+          $data{$service}{'Unknown Entries'}{$line}++;
+       }
++   } elsif ($service eq 'systemd-user') {
++      if ($line =~ /session (?:opened|closed) for user /) {
++         # ignore this line
++      } else {
++         $data{$service}{'Unknown Entries'}{$line}++;
++      }
+    } else {
+       $data{$service}{'Unknown Entries'}{$line}++;
+    }
+
