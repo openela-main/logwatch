@@ -1,0 +1,13 @@
+diff --git a/scripts/services/dovecot b/scripts/services/dovecot
+index 95fc6e9..c9fccbc 100755
+--- a/scripts/services/dovecot
++++ b/scripts/services/dovecot
+@@ -186,7 +186,7 @@ while (defined($ThisLine = <STDIN>)) {
+       $Deliver{$User}{$Mailbox}++;
+ 
+ # For Sieve-based delivery
+-    } elsif ( ($User, $Mailbox) = ( $ThisLine =~ /^$dovecottag (?:lda|deliver)\((.*)\): sieve: msgid=.*: stored mail into mailbox '(.*)'/ ) ) {
++    } elsif ( ($User, $Mailbox) = ( $ThisLine =~ /^$dovecottag (?:lda|deliver)\((.*)\)(?:<[^>]+><[^>]+>)?: sieve: msgid=.*: stored mail into mailbox '(.*)'/ ) ) {
+       $Deliver{$User}{$Mailbox}++;
+ 
+ # LMTP-based delivery
