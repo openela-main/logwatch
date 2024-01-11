@@ -1,0 +1,31 @@
+--- a/scripts/services/systemd	2022/01/20 16:00:56	1.1
++++ b/scripts/services/systemd	2022/01/20 16:14:16
+@@ -42,7 +42,7 @@
+        $ThisLine =~ / failed\.$/ or
+        $ThisLine =~ /: (control|main) process exited, code=(exited|killed),? status=/ or
+        # Informational
+-       $ThisLine =~ /^Closed .* socket\.$/ or
++       $ThisLine =~ /^Closed .* [Ss]ocket\.$/ or
+        $ThisLine =~ /^Closed udev / or
+        $ThisLine =~ /^Detected (architecture|virtualization) / or
+        $ThisLine =~ /^Found device / or
+@@ -76,11 +76,17 @@
+        $ThisLine =~ /^Configuration file \/usr\/lib\/systemd\/system\/wpa_supplicant\.service is marked executable/ or
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1306452 
+        $ThisLine =~ /^tmp\.mount: Directory \/tmp to mount over is not empty, mounting anyway\.$/ or
+-       $ThisLine =~ /^Received SIGRTMIN\+2[01] from PID \d+ \(plymouthd\)\.$/ or
++       $ThisLine =~ /^Received SIGRTMIN\+2[01] from PID \d+ \((?:plymouthd|n\/a)\)\.$/ or
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1072368
+        $ThisLine =~ /^Received SIGRTMIN\+24 from PID \d+ \(kill\)\.$/ or
+        $ThisLine =~ /^Removed slice / or
+-       $ThisLine =~ /^pam_unix\(systemd-user:session\): session (?:opened|closed) for user/
++       $ThisLine =~ /^pam_unix\(systemd-user:session\): session (?:opened|closed) for user/ or
++       # Ex: user-runtime-dir@1001.service: Succeeded.
++       $ThisLine =~ /: Succeeded\.$/ or
++       # Ex: Reloading Fail2Ban Service.
++       $ThisLine =~ /^Reloading .*\.$/ or
++       # Ex: Set up automount Arbitrary Executable File Formats File System Automount Point.
++       $ThisLine =~ /^Set up .*\.$/
+    ) {
+       # Ignore these
+    } elsif (my ($service) = ($ThisLine =~ /^Unit (.*) entered failed state\.$/)) {

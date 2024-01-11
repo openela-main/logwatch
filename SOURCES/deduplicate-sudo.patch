@@ -1,0 +1,11 @@
+--- a/conf/services/secure.conf	2016-03-30 23:32:33.000000000 +0200
++++ b/conf/services/secure.conf	2023-06-27 19:42:42.296713366 +0200
+@@ -24,7 +24,7 @@
+ # Use this to ignore certain services in the secure log.
+ # You can ignore as many services as you would like.
+ # (we ignore sshd because its entries are processed by the sshd script)
+-$ignore_services = sshd Pluto stunnel proftpd saslauthd imapd postfix/smtpd
++$ignore_services = sshd Pluto stunnel proftpd saslauthd imapd postfix/smtpd sudo
+ 
+ # For these services, summarize only (i.e. don't least each IP, just
+ # list the number of connections total)

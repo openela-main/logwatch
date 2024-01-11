@@ -1,0 +1,20 @@
+--- a/scripts/services/sshd	2022/01/20 15:28:35	1.1
++++ b/scripts/services/sshd	2022/01/20 15:32:01
+@@ -1,3 +1,5 @@
++#!/usr/bin/env perl
++
+ ##########################################################################
+ # $Id$
+ ##########################################################################
+@@ -376,6 +378,11 @@
+          print STDERR "DEBUG: Found -Failed login- line\n";
+       }
+       $BadLogins{$Host}{"$User/$Method"}++;
++   } elsif ( my ($User,$Host) = ( $ThisLine =~ m/^Disconnected from authenticating user (\S+) (\S+) / ) ) {
++      if ( $Debug >= 5 ) {
++         print STDERR "DEBUG: Found -Disconnected Failed login- line\n";
++      }
++      $BadLogins{$Host}{$User}++;
+    } elsif ($ThisLine =~ s/^(log: )?Could not reverse map address ([^ ]*).*$/$2/) {
+       $NoRevMap{$ThisLine}++;
+    } elsif ( my ($Address) = ($ThisLine =~ /^reverse mapping checking getaddrinfo for (\S+( \[\S+\])?) failed - POSSIBLE BREAK-IN ATTEMPT!/)) {

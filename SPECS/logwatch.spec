@@ -1,7 +1,7 @@
 Summary: A log file analysis program
 Name: logwatch
 Version: 7.4.3
-Release: 11%{?dist}
+Release: 21%{?dist}
 License: MIT
 Group: Applications/System
 URL: http://www.logwatch.org/
@@ -24,6 +24,16 @@ Patch7: logwatch-sshd-2.patch
 # https://sourceforge.net/p/logwatch/git/ci/b325c68f83ef6c3e3ec9f35c8fdeff5b43fd8559/
 # cherry-pick hunk at @@ -224,7 +224,7 @@
 Patch8: logwatch-dovecot.patch
+Patch9: logwatch-pam-unix.patch
+Patch10: logwatch-failed-login.patch
+Patch11: systemd-noise-filter.patch
+Patch12: auditd-startup-messages.patch
+Patch13: ignore-server-ready.patch
+Patch14: ras-correctable-errors.patch
+Patch15: deduplicate-sudo.patch
+Patch16: polkit-startup-messages.patch
+Patch17: sshd-sort-by-count.patch
+Patch18: sendmail-6-digit-pid.patch
 
 BuildRequires: perl-generators
 Requires: grep mailx
@@ -50,6 +60,16 @@ of the package on many systems.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
+%patch18 -p1
 rm -f scripts/services/*.orig
 
 %build
@@ -149,6 +169,46 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_mandir}/man*/*
 
 %changelog
+* Wed Jun 28 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-21
+- fix sendmail logwatch script to allow 6-digit PIDs
+- Resolves: rhbz#2046459
+
+* Wed Jun 28 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-20
+- sshd sort failed logins and illegal users by count, not IP address
+- Resolves: rhbz#2044101
+
+* Wed Jun 28 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-19
+- ignore harmless polkit startup messages
+- Resolves: rhbz#2043952
+
+* Tue Jun 27 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-18
+- ignore sudo service as it is already reported in secure service
+- Resolves: rhbz#2043951
+
+* Tue Jun 27 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-17
+- do not treat "RAS: Correctable Errors collector initialized" message as an error
+- Resolves: rhbz#2043946
+
+* Tue Jun 27 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-16
+- ignore normal "Server ready" startup message from fail2ban
+- Resolves: rhbz#2043944
+
+* Tue Jun 27 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-15
+- ignore a couple of normal auditd startup messages
+- Resolves: rhbz#2043942
+
+* Tue Jun 27 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-14
+- patch to logwatch systemd script to add some filtering
+- Resolves: rhbz#2043109
+
+* Thu Apr 20 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-13
+- fix unrecognized "Disconnected from authenticating user" failed logins
+- Resolves: rhbz#2043088
+
+* Thu Apr 20 2023 Pavel Šimovec <psimovec@redhat.com> - 7.4.3-12
+- add logwatch-pam-unix.patch
+- Resolves: rhbz#2043044
+
 * Fri May 07 2021 Vincent Mihalkovic <vmihalko@redhat.com> - 7.4.3-11
 - add gating.yaml file
 
