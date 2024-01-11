@@ -2,10 +2,12 @@
 Summary: A log file analysis program
 Name: logwatch
 Version: 7.5.5
-Release: 4%{?dist}
+Release: 6%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch
 Source0: logwatch-%{version}.tar.gz
+Patch0: cron.patch
+Patch1: systemd-deactivated.patch
 #Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRequires: perl-generators
 Requires: grep
@@ -31,6 +33,8 @@ of the package on many systems.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 
@@ -125,6 +129,14 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_unitdir}/logwatch.timer
 
 %changelog
+* Fri Apr 14 2023 Pavel Šimovec <psimovec@redhat.com> - 7.5.5-6
+- Add patch to fix systemd messages containing "Deactivated"
+- Resolves: rhbz:2160770
+
+* Thu Mar 02 2023 Pavel Šimovec <psimovec@redhat.com> - 7.5.5-5
+- Add patch to remove CMDEND from cron service
+  Resolves: rhbz#2158271
+
 * Mon Aug 09 2021 Mohan Boddu <mboddu@redhat.com> - 7.5.5-4
 - Rebuilt for IMA sigs, glibc 2.34, aarch64 flags
   Related: rhbz#1991688
