@@ -2,12 +2,13 @@
 Summary: A log file analysis program
 Name: logwatch
 Version: 7.5.5
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch
 Source0: logwatch-%{version}.tar.gz
 Patch0: cron.patch
 Patch1: systemd-deactivated.patch
+Patch2: sshd-sort-by-count.patch
 #Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRequires: perl-generators
 Requires: grep
@@ -35,6 +36,7 @@ of the package on many systems.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 
@@ -129,6 +131,10 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_unitdir}/logwatch.timer
 
 %changelog
+* Thu Nov 28 2024 Pavel Simovec <psimovec@redhat.com> - 7.5.5-7
+- sshd: sort IP addresses reported by count
+- Resolves: RHEL-69277
+
 * Fri Apr 14 2023 Pavel Šimovec <psimovec@redhat.com> - 7.5.5-6
 - Add patch to fix systemd messages containing "Deactivated"
 - Resolves: rhbz:2160770

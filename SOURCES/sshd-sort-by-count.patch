@@ -1,0 +1,22 @@
+--- a/scripts/services/sshd	2021-01-22 21:59:40.000000000 +0100
++++ b/scripts/services/sshd	2024-11-28 10:33:31.199069612 +0100
+@@ -515,7 +515,8 @@
+ 
+ if (keys %BadLogins) {
+    print "\nFailed logins from:\n";
+-   foreach my $ip (sort SortIP keys %BadLogins) {
++   my $totalSort = TotalCountOrder(%BadLogins, \&SortIP);
++   foreach my $ip (sort $totalSort keys %BadLogins) {
+       my $name = LookupIP($ip);
+       my $totcount = 0;
+       foreach my $user (keys %{$BadLogins{$ip}}) {
+@@ -538,7 +539,8 @@
+       print " (with threshold >= $IllegalUsersThreshold)";
+       }
+    print ":\n";
+-   foreach my $ip (sort SortIP keys %IllegalUsers) {
++   my $totalSort = TotalCountOrder(%IllegalUsers, \&SortIP);
++   foreach my $ip (sort $totalSort keys %IllegalUsers) {
+       my $name = LookupIP($ip);
+       my $totcount = 0;
+       foreach my $user (keys %{$IllegalUsers{$ip}}) {
