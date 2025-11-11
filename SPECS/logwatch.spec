@@ -2,11 +2,12 @@
 Summary: Analyzes and Reports on system logs
 Name: logwatch
 Version: 7.11
-Release: 2%{?dist}
+Release: 4%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch/
 Source0: https://sourceforge.net/projects/logwatch/files/%{name}-%{version}/%{name}-%{version}.tar.gz
 Patch0: sshd-sort-by-count.patch
+Patch1: zstd-log-support.patch
 BuildRequires: perl-generators
 Requires: grep
 Requires: perl(Date::Manip)
@@ -130,6 +131,14 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_unitdir}/logwatch.timer
 
 %changelog
+* Mon Aug 04 2025 Pavel Simovec <psimovec@redhat.com> - 7.11-4
+- rebuilt
+- Resolves: RHEL-102044
+
+* Tue Jul 15 2025 Pavel Simovec <psimovec@redhat.com> - 7.11-3
+- Add support for zstd-compressed log files
+- Resolves: RHEL-102044
+
 * Wed Nov 27 2024 Pavel Simovec <psimovec@redhat.com> - 7.11-2
 - sshd: sort IP adresses by report count
 - Resolves: RHEL-58995

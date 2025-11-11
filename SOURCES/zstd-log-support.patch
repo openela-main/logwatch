@@ -1,0 +1,41 @@
+diff --color -urN a/conf/logwatch.conf b/conf/logwatch.conf
+--- a/conf/logwatch.conf	2025-07-15 12:47:54.895159550 +0200
++++ b/conf/logwatch.conf	2025-07-15 16:35:29.127282999 +0200
+@@ -191,5 +191,6 @@
+ # PathTozcat = "zcat"
+ # PathTobzcat = "bzcat"
+ # PathToxzcat = "zxcat"
++# PathTozstdcat = "zstdcat"
+ 
+ # vi: shiftwidth=3 tabstop=3 et
+diff --color -urN a/scripts/logwatch.pl b/scripts/logwatch.pl
+--- a/scripts/logwatch.pl	2025-07-15 12:47:54.869744800 +0200
++++ b/scripts/logwatch.pl	2025-07-15 16:34:26.473278680 +0200
+@@ -96,6 +96,7 @@
+ $Config{'pathtozcat'} = "zcat";
+ $Config{'pathtobzcat'} = "bzcat";
+ $Config{'pathtoxzcat'} = "xzcat";
++$Config{'pathtozstdcat'} = "zstdcat";
+ $Config{'output'} = "stdout"; #8.0
+ $Config{'format'} = "text"; #8.0
+ $Config{'encode'} = "none"; #8.0
+@@ -746,7 +747,7 @@
+ 
+    # Handle compressed log files using the archive codepath
+    foreach my $lf (@{$LogFileData{$LogFile}{'logfiles'}}) {
+-      if ($lf =~ /\.(?:gz|bz2|xz)$/) {
++      if ($lf =~ /\.(?:gz|bz2|xz|zst)$/) {
+          push @{$LogFileData{$LogFile}{'archives'}}, $lf;
+       } else {
+          push @FileList, $lf;
+@@ -798,6 +799,10 @@
+             my $arguments = "'${Archive}' 2>/dev/null >> $DestFile";
+             system("$Config{'pathtoxzcat'} $arguments") == 0
+                or die "system '$Config{'pathtoxzcat'} $arguments' failed: $?"
++         } elsif (($Archive =~ m/zst$/) && (-f "$Archive") && (-s "$Archive")) {
++            my $arguments = "'${Archive}' 2>/dev/null >> $DestFile";
++            system("$Config{'pathtozstdcat'} $arguments") == 0
++               or die "system '$Config{'pathtozstdcat'} $arguments' failed: $?"
+          } elsif ((-f "$Archive") && (-s "$Archive")) {
+             my $arguments = "'${Archive}'  >> $DestFile";
+             system("$Config{'pathtocat'} $arguments") == 0
