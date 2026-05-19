@@ -2,16 +2,18 @@
 Summary: A log file analysis program
 Name: logwatch
 Version: 7.5.5
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch
 Source0: logwatch-%{version}.tar.gz
+Source1: logwatch-tmpfiles.conf
 Patch0: cron.patch
 Patch1: systemd-deactivated.patch
 Patch2: sshd-sort-by-count.patch
 Patch3: zstd-log-support.patch
 #Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRequires: perl-generators
+BuildRequires: systemd-rpm-macros
 Requires: grep
 Requires: /usr/bin/mailx
 Requires: perl(Date::Manip)
@@ -91,6 +93,9 @@ mkdir -p %{buildroot}%{_unitdir}
 install -m 0644 scheduler/logwatch.timer %{buildroot}%{_unitdir}/logwatch.timer
 install -m 0644 scheduler/logwatch.service %{buildroot}%{_unitdir}/logwatch.service
 
+install -m 0755 -d %{buildroot}%{_tmpfilesdir}
+install -m 0644 %{SOURCE1} %{buildroot}%{_tmpfilesdir}/logwatch.conf
+
 ln -s ../../%{_datadir}/logwatch/scripts/logwatch.pl %{buildroot}/%{_sbindir}/logwatch
 
 echo "###### REGULAR EXPRESSIONS IN THIS FILE WILL BE TRIMMED FROM REPORT OUTPUT #####" > %{buildroot}%{_sysconfdir}/logwatch/conf/ignore.conf
@@ -131,8 +136,13 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_mandir}/man*/*
 %{_unitdir}/logwatch.service
 %{_unitdir}/logwatch.timer
+%{_tmpfilesdir}/logwatch.conf
 
 %changelog
+* Wed Jan 08 2026 Vincent Mihalkovic <vmihalko@redhat.com> - 7.5.5-9
+- Install and use systemd-tmpfiles.d mechanism
+- Resolves: RHEL-105257
+
 * Mon Aug 04 2025 Pavel Simovec <psimovec@redhat.com>
 - Add support for zstd-compressed log files
 - Resolves: RHEL-97021
